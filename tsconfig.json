@@ -1,0 +1,13 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+  },
+  "include": [
+    "./front-end/"
+  ],
+  "exclude": [
+    "__sapper__/*",
+    "./server/**/*"
+  ]
+}

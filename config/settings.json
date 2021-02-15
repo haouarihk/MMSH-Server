@@ -1,0 +1,29 @@
+{
+    "port": 3001,
+    "front_end_div_dir": "front-end/src",
+    "front_end_out_dir": "front-end/public",
+    "plugins": [
+        {
+            "name": "compiler",
+            "discription": " this is a compiler that uses diffrent tools to convert files from one thing to another.",
+            "maindir": "compiler",
+            "input": {
+                "file": "main.ts"
+            },
+            "output": {
+                "file": "./bundle.js"
+            },
+            "config": {}
+        },
+        {
+            "maindir": "main",
+            "input": {
+                "file": "main.ts"
+            },
+            "output": {
+                "file": "./bundle.js"
+            },
+            "config": {}
+        }
+    ]
+}

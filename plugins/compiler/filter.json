@@ -1,0 +1,13 @@
+{
+    "enabled": true,
+    "words": [
+        "fuck",
+        "shit",
+        "Swear"
+    ],
+    "replaceBy": "u",
+    "filterWords": true,
+    "filterComas": true,
+    "filterSlashes": true,
+    "filterUsingDecoder": true
+}

@@ -1,0 +1,8 @@
+public/build
+server/lib
+
+plugins/compiler/compilers
+
+.env
+
+node_modules

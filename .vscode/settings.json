@@ -1,0 +1,9 @@
+{
+    "files.exclude": {
+        "**/node_modules": true,
+        "public/build": true,
+        "**/.DS_Store": true,
+        "back-end/lib": true,
+        "server/lib": true
+    }
+}
