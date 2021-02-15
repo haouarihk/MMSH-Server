@@ -5,7 +5,6 @@ import { join } from 'path';
 
 
 
-
 import { forEachSync, get } from './components/utils.js';
 
 
@@ -42,9 +41,8 @@ let sr = new Server(settings);
 const chCofig = get('./plugins/compiler/config.json')
 const chFontMainDir = join(settings.front_end_out_dir, settings.plugins[0].maindir)
 
-import CH from "converter-toless-plugin"
+import * as CH from "converter-toless-plugin"
 //---
-
 ///-
 
 
@@ -60,7 +58,7 @@ import CH from "converter-toless-plugin"
         switch (plug.maindir) {
             case "compiler":
 
-                let _plugin = new CH({ debug: false })
+                let _plugin = new CH.default({ debug: false })
                 await sr.use(_plugin, { ...plug, ...chCofig })
 
         }

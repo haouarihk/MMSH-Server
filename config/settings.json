@@ -1,5 +1,5 @@
 {
-    "port": 3001,
+    "port": 3002,
     "front_end_div_dir": "front-end/src",
     "front_end_out_dir": "front-end/public",
     "plugins": [

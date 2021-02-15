@@ -22,6 +22,7 @@ export default class Server {
     settings: data.Settings;
 
     recaptchaKey: string;
+    http: http.Server
     constructor(settings: data.Settings) {
         this.settings = settings;
         this.plugins = [];
@@ -29,6 +30,7 @@ export default class Server {
 
         this.app = express()
 
+        this.http = http.createServer(this.app);
 
         this.recaptchaKey = settings.recaptchaKey;
     }
@@ -41,12 +43,13 @@ export default class Server {
 
 
         // set up the server
-        await this.app.listen(this.PORT, () => {
-            //@ts-ignore
-            //this.PORT = +this.hoster.address()["port"]
+        this.http.listen(this.PORT, () => {
             console.log(`Server Started: http://localhost:${this.PORT}`);
-
         });
+
+
+
+
     }
 
 
@@ -116,11 +119,6 @@ export default class Server {
 
 
     async reCaptchaCheck(CaptchaBody: string, remoteAddress: string) {
-        // if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
-
-        // }
-        // req.connection.remoteAddress
-
         const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURI(this.recaptchaKey)}&amp;response=${encodeURI(CaptchaBody)}&amp;remoteip=${encodeURI(remoteAddress)}`;
 
 
