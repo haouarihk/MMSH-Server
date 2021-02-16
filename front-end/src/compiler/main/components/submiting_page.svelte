@@ -1,7 +1,8 @@
 <script lang="ts">
     import pdh from "param-handler";
 
-    export let downloadTheFile: Function;
+    export let setToken: (_token: string) => void;
+
     export let errorMessage: Function;
     export let vmod: number;
     let directSubmitting: boolean = false,
@@ -88,8 +89,6 @@
     }
 
     async function submitit(token: string) {
-        console.log("submitted", files);
-
         var data = new FormData();
 
         // the file
@@ -111,7 +110,7 @@
 
         switch (result.status) {
             case 200:
-                downloadTheFile(result.url);
+                setToken(await result.text());
                 break;
 
             default:

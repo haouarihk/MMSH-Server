@@ -20,3 +20,14 @@ export function toJs(obj: any) {
 export function get(path: string) {
     return JSON.parse(fs.readFileSync(join(_dirname, path), "utf-8"));
 }
+
+
+export function find(obj: any, value: string): string {
+    let result: string = ""
+    Object.keys(obj).forEach((key: string) => {
+        if (obj[key] == value) {
+            result = key;
+        }
+    });
+    return result
+}

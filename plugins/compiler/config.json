@@ -19,6 +19,12 @@
         }
     },
     "config": {
+        "debug": false,
+        "logInFile": true,
+        "timetoGarbageCleaner": 240,
+        "deleteallTempFilesOnStart": true,
+        "filesizeLimitsMB": 100,
+        "randomStringSize": 8,
         "compilers": [
             {
                 "name": "Word to Latex",
@@ -26,17 +32,6 @@
                 "CompilerPath": "./compilers/doc2latex/d2t",
                 "command": "-o \"#{oPath}\" \"#{iPath.type}\"",
                 "whitelistInputs": [
-                    "Doc",
-                    "Docx"
-                ]
-            },
-            {
-                "name": "Doc to PDF",
-                "commander": "python",
-                "CompilerPath": "./compilers/word-to-pdf/main.py",
-                "command": "-o \"#{CompeleteOutputFilePath}\" -i \"#{CompeleteInputFilePath}\"",
-                "whitelistInputs": [
-                    "Doc",
                     "Docx"
                 ]
             }

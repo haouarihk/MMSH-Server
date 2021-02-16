@@ -18,10 +18,17 @@ export default class Router {
     logdir: string;
 
     reCaptchaCheck: (UserToken: string, ip: string) => [stated: boolean, msg: string];
+    newSocketMessage: (token: string, event: string, message: any) => void;
+    newSocketUser: (token: string) => void;
+    endSocketUser: (token: string) => void;
     constructor(
         props: {
             messagePageName: string, pages: Pages, paths: any, app: Express, alldir: Dirs,
-            reCaptchaCheck: (UserToken: string, ip: string) => [boolean, string]
+
+            reCaptchaCheck: (UserToken: string, ip: string) => [boolean, string],
+            newSocketMessage: (token: string, event: string, message: any) => void,
+            newSocketUser: (token: string) => void,
+            endSocketUser: (token: string) => void,
         }) {
 
         this.alldir = props.alldir;
@@ -30,6 +37,18 @@ export default class Router {
         this.pages = props.pages;
         this.paths = props.paths;
         this.messagePageName = props.messagePageName;
+
+        this.newSocketMessage = props.newSocketMessage || ((_: string, __: string) => {
+            console.warn(`you don't have newSocketMessage passed to plugin ${this.alldir.maindir}`)
+        })
+
+        this.newSocketUser = props.newSocketUser || ((_: string, __: string) => {
+            console.warn(`you don't have newSocketUser passed to plugin ${this.alldir.maindir}`)
+        })
+
+        this.endSocketUser = props.endSocketUser || ((_: string, __: string) => {
+            console.warn(`you don't have endSocketUser passed to plugin ${this.alldir.maindir}`)
+        })
 
         this.reCaptchaCheck = props.reCaptchaCheck || ((_: string, __: string) => {
             return [true, "its not supported on this server yet"]

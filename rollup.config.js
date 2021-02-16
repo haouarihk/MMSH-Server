@@ -60,20 +60,14 @@ const comander = (extention, { input, output }) => {
 				inlineSources: !production
 			}),
 
-			// In dev mode, call `npm run start` once
-			// the bundle has been generated
-			// !production && serve(),
-
-			// Watch the `public` directory and refresh the
-			// browser on changes when not in production
-			// !production && livereload('public'),
-
 			// If we're building for production (npm run build
 			// instead of npm run dev), minify
 			production && terser()
+
+
 		],
 		watch: {
-			clearScreen: false
+			clearScreen: true
 		}
 	}
 	if (typeof extention.special_options == typeof {})
@@ -128,7 +122,7 @@ const executer = (async () => {
 
 	await forEachSync(extens.plugins, async (exten) => {
 		let file = "main.ts";
-		(await fromDir(join(_dirname,extens.front_end_div_dir, exten.maindir), file)).forEach(input => {
+		(await fromDir(join(_dirname, extens.front_end_div_dir, exten.maindir), file)).forEach(input => {
 			let enddir = join(_dirname, extens.front_end_div_dir)
 			let subdir = join(input).split(file).join``.split(enddir).join``
 			let subbie = {

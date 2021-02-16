@@ -13,6 +13,9 @@ import { data } from '../d/types';
 
 import fetch from 'node-fetch';
 
+import * as Socket from "socket.io"
+import { find } from "./utils.js";
+
 
 export default class Server {
     private PORT: number;
@@ -22,7 +25,15 @@ export default class Server {
     settings: data.Settings;
 
     recaptchaKey: string;
-    http: http.Server
+    http: http.Server;
+
+
+    // socket stuff
+    io: Socket.Server;
+    users: any;
+    availableTokens: string[];
+
+
     constructor(settings: data.Settings) {
         this.settings = settings;
         this.plugins = [];
@@ -32,7 +43,13 @@ export default class Server {
 
         this.http = http.createServer(this.app);
 
+        this.io = new Socket.Server(this.http)
+
         this.recaptchaKey = settings.recaptchaKey;
+
+
+        this.users = {};
+        this.availableTokens = [];
     }
 
     async start() {
@@ -41,17 +58,14 @@ export default class Server {
 
         this.runMain()
 
+        this.runSocket()
 
         // set up the server
         this.http.listen(this.PORT, () => {
             console.log(`Server Started: http://localhost:${this.PORT}`);
         });
 
-
-
-
     }
-
 
     runMain() {
         let alldir = {
@@ -85,6 +99,33 @@ export default class Server {
         })
     }
 
+    runSocket() {
+        this.io.on('connection', (socket: Socket.Socket) => {
+
+            socket.on("disconnect", () => {
+                console.log("a user disconnected")
+                if (!this.users[socket.id]) return;
+
+                const ti = this.availableTokens.indexOf(this.users[socket.id])
+
+                if (ti > -1) {
+                    delete this.users[socket.id]
+                    this.availableTokens = this.availableTokens.splice(ti, 1)
+                }
+            })
+
+            socket.on("takeMyToken", (token: string) => {
+                console.log("a user with token->", token)
+                if (this.availableTokens.indexOf(token) > -1)
+                    this.users[socket.id] = token;
+                else
+                    socket.disconnect()
+            })
+
+            console.log('a user connected');
+        });
+    }
+
     async use(plugin: any, tson: data.Plugin) {
         // possible breaking path
         let alldir = {
@@ -93,18 +134,41 @@ export default class Server {
             back_end: join(_dirname, "plugins", tson.maindir)
         }
 
-
         this.plugins.push(tson);
 
-
-
+        // giving the express app to the plugin
         plugin.app = {
             ...this.app
         };
 
+        // giving router to the plugin
         plugin.router = new Router({
+            // Socket stuff for logs while in proccess
+            newSocketMessage: (token: string, event: string, message: any) => {
+                console.log(token, event, message)
+                let socketid = find(this.users, token);
+                if (socketid == "") return
+                this.io.to(socketid).emit(event, message)
+            },
+
+            // adding a new available token
+            newSocketUser: (token: string) => { console.log(token), this.availableTokens.push(token) },
+
+            // adding a new available token
+            endSocketUser: (token: string) => {
+                let socketid = find(this.users, token);
+                if (socketid == "") return
+                this.io.to(socketid).removeAllListeners()
+                this.availableTokens.splice(this.availableTokens.indexOf(token), 1)
+            },
+
+            // for verifiying google captcha
             reCaptchaCheck: (a: string, b: string) => this.reCaptchaCheck(a, b),
+
+            // data
             ...tson.routerConfig,
+
+            // paths
             alldir
         })
 

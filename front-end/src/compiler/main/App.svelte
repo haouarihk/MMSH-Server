@@ -13,6 +13,11 @@
         console.log(message);
     };
 
+    let token: string;
+    const setToken = (_token: string): void => {
+        token = _token;
+    };
+
     let url: string = "";
     const downloadTheFile = (_url: string): void => {
         url = _url;
@@ -23,13 +28,13 @@
 <link src="https://www.google.com/recaptcha/api.js" />
 
 {#if vmod == 1}
-    <LoadingPage />
+    <LoadingPage {token} {downloadTheFile} />
 {:else if vmod == 2}
     <FinishedPage {url} />
 {:else if vmod == 3}
     <Message {message} />
 {:else}
-    <SubmitingPage bind:vmod {errorMessage} {downloadTheFile} />
+    <SubmitingPage bind:vmod {errorMessage} {setToken} />
 {/if}
 
 <footer
