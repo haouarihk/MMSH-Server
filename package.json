@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rollup -c && tsc",
+    "b-tsc": "cd ./server/ && tsc",
     "f-dev": "rollup -c -w",
     "server-dev": "cd ./server/ && tsc -watch",
     "server": "node ./server/lib/index.js",
