@@ -15,17 +15,7 @@
 <style>
     * {
         transition: all 0.6s;
-        font-size: 5vw !important;
-    }
-
-    html {
-        height: 100%;
-    }
-
-    body {
-        font-family: "Lato", sans-serif;
-        color: #888;
-        margin: 0;
+        font-size: 1.5vw !important;
     }
 
     #main {
