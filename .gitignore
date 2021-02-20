@@ -1,9 +1,10 @@
-public/build
+front-end/public/**/*
 server/lib
 
-plugins/compiler/compilers
 
-front-end/public/**/*
+plugins/compiler/compilers
+plugins/compiler/output/**
+
 
 .env
 
