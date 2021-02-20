@@ -3,6 +3,8 @@ server/lib
 
 plugins/compiler/compilers
 
+front-end/public/**/*
+
 .env
 
 node_modules
