@@ -27,9 +27,9 @@
         "randomStringSize": 8,
         "compilers": [
             {
-                "name": "Word to Latex",
+                "name": "Docx to Latex",
                 "commander": "",
-                "CompilerPath": "./compilers/doc2latex/d2t",
+                "CompilerPath": "./compilers/doc2tex/d2t",
                 "command": "-o \"#{oPath}\" \"#{iPath.type}\"",
                 "whitelistInputs": [
                     "Docx"
