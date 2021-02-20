@@ -8,4 +8,4 @@ COPY . .
 RUN apt-get update
 RUN apt-get install --assume-yes default-jre npm
 
-CMD ["npm", "run", "server"] 
+CMD ["npm", "run", "ts-server"] 
