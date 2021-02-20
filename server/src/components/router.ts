@@ -6,7 +6,7 @@ import type { Dirs, Pages } from "../d/types";
 import arp from "app-root-path";
 const _dirname = arp.path
 
-import { toJs } from "./utils.js";
+import { toJs } from "./utils";
 
 
 export default class Router {

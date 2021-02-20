@@ -3,7 +3,7 @@ import express from 'express';
 
 import * as http from "http"
 import { join } from "path";
-import Router from "./router.js";
+import Router from "./router";
 
 import arp from "app-root-path";
 const _dirname = arp.path
@@ -14,7 +14,7 @@ import { data } from '../d/types';
 import fetch from 'node-fetch';
 
 import * as Socket from "socket.io"
-import { find } from "./utils.js";
+import { find } from "./utils";
 
 
 export default class Server {

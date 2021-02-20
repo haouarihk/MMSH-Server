@@ -5,7 +5,7 @@ import { join } from 'path';
 
 
 
-import { forEachSync, get } from './components/utils.js';
+import { forEachSync, get } from './components/utils';
 
 
 
@@ -15,7 +15,7 @@ import { forEachSync, get } from './components/utils.js';
 
 
 //importing the server
-import Server from "./components/server.js"
+import Server from "./components/server"
 //
 
 
