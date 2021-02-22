@@ -21,7 +21,7 @@
     "config": {
         "debug": false,
         "logInFile": true,
-        "timetoGarbageCleaner": 1,
+        "timetoGarbageCleaner": 240,
         "deleteallTempFilesOnStart": true,
         "filesizeLimitsMB": 100,
         "randomStringSize": 8,
@@ -35,6 +35,24 @@
                     "Docx"
                 ]
             }
-        ]
+        ],
+
+        "filter":{
+            "enabled": true,
+
+            "words": [
+                "fuck", "shit", "Swear", "www", "https", "http", "*", ">"
+            ],
+        
+            "filterWords": true,
+        
+            "filterComas": true,
+        
+            "filterSlashes": true,
+        
+            "filterUsingDecoder": true,
+
+            "replaceBy": "u"
+        }
     }
 }

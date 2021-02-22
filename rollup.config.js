@@ -36,7 +36,7 @@ const comander = (extention, { input, output }) => {
 				// stringify the object       
 				process: JSON.stringify({
 					env: {
-						...config().parsed // attached the .env config
+						SITEKEY:config().parsed.SITEKEY // attached the .env config
 					}
 				})
 			}),

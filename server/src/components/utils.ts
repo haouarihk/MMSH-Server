@@ -1,6 +1,6 @@
 import fs from "fs"
 import { join } from "path"
-
+import { Request, Response } from "express";
 import arp from "app-root-path";
 import * as Socket from "socket.io"
 const _dirname = arp.path
@@ -54,20 +54,19 @@ export namespace throttleHanding {
         blacklisted: false,
     }
 
+    export function getIpFromRequest(req: Request): string | any {
+        //@ts-ignore
+        return req.ip | req.ips | req.connection.remoteAddress;
+    }
+
     export function getIpFromSocket(socket: Socket.Socket): string {
         let ip = socket.request.connection.remoteAddress
         return ip != undefined ? ip : "";
     }
 
-    export function canBeServed(socket: Socket.Socket, packet: any[]) {
-        const ip = getIpFromSocket(socket);
 
+    export function canBeServed(ip: string, disconnect: Function, maxDiffer: number = 50) {
         const now = Date.now();
-        const disconnect = () => {
-            setTimeout(() => {
-                socket.disconnect(true);
-            }, Sec);
-        }
 
         if (ips[ip] == undefined)
             ips[ip] = {
@@ -86,14 +85,15 @@ export namespace throttleHanding {
 
             // if the connectionssPerSecond is too high then blacklist the Ip
             if (connectionssPerSecond > 300) {
+                console.log(`ip ${ip} has been blacklisted`)
                 ips[ip].blacklisted = true;
             }
 
             // Second layer: Calculate the time between now and the last time the user made a connection
-            var diff = now - ips[ip].lastAccess;
+            const diff = now - ips[ip].lastAccess;
 
             // Disconnect the user if the diff is too low
-            if (diff < 50) {
+            if (diff < maxDiffer) {
                 ips[ip].markedForDisconnect = true;
                 disconnect()
                 return false;
@@ -101,6 +101,26 @@ export namespace throttleHanding {
         }
         ips[ip].lastAccess = now;
         return true;
+    }
+
+    export function socketCanBeServed(socket: Socket.Socket, packet: any[]) {
+        return canBeServed(getIpFromSocket(socket), () => {
+            setTimeout(() => {
+                console.info("a socket connection has been blocked")
+                socket.disconnect();
+            }, Sec);
+        })
+    }
+
+    export function expressCanBeServed(req: Request, res: Response, next: Function) {
+        if (canBeServed(getIpFromRequest(req), () => {
+            setTimeout(() => {
+                console.info("an express connection has been blocked")
+                res.status(503).send();
+                res.end();
+            }, 0.1);
+        }, 0))
+            next();
     }
 }
 

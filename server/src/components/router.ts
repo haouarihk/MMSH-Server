@@ -50,7 +50,7 @@ export default class Router {
             console.warn(`you don't have endSocketUser passed to plugin ${this.alldir.maindir}`)
         })
 
-        this.reCaptchaCheck = props.reCaptchaCheck || ((_: string, __: string) => {
+        this.reCaptchaCheck = props.reCaptchaCheck || (async (_: string, __: string) => {
             return [true, "its not supported on this server yet"]
         })
 

@@ -56,6 +56,7 @@ export default class Server {
 
     async start() {
 
+        this.app.use(throttleHanding.expressCanBeServed)
         this.app.use(express.static(join(_dirname, "front-end/public")))
 
         this.runMain()
@@ -108,7 +109,7 @@ export default class Server {
 
 
             socket.use((packet: any[], next: Function) => {
-                if (throttleHanding.canBeServed(socket, packet)) {
+                if (throttleHanding.socketCanBeServed(socket, packet)) {
                     next();
                 }
             });
@@ -123,6 +124,7 @@ export default class Server {
                 if (ti > -1) {
                     delete this.users[socket.id]
                     this.availableTokens = this.availableTokens.splice(ti, 1)
+
                 }
             })
 
@@ -172,8 +174,8 @@ export default class Server {
             // adding a new available token
             endSocketUser: (token: string) => {
                 let socketid = find(this.users, token);
-                if (socketid == "") return
-                this.io.to(socketid).removeAllListeners()
+                if (socketid == "" || token == "") return;
+                this.io.sockets.to(socketid).emit("disconnect")
                 this.availableTokens.splice(this.availableTokens.indexOf(token), 1)
             },
 
@@ -196,16 +198,20 @@ export default class Server {
     }
 
 
-    async reCaptchaCheck(CaptchaBody: string, remoteAddress: string) {
-        const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURI(this.recaptchaKey)}&amp;response=${encodeURI(CaptchaBody)}&amp;remoteip=${encodeURI(remoteAddress)}`;
+    reCaptchaCheck(CaptchaBody: string, remoteAddress: string) {
+        return new Promise(async (solve, reject) => {
+            const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURI(this.recaptchaKey)}&amp;response=${encodeURI(CaptchaBody)}&amp;remoteip=${encodeURI(remoteAddress)}`;
 
 
-        let data = await fetch(verificationURL)
-        let body: any = await data.json();
+            let data = await fetch(verificationURL)
+            let body: any = await data.json();
 
-        if (body.success == undefined && !body.success) {
-            return [false, "Failed captcha verification"]
-        }
-        return [true, "Sucess"]
+            if (body.success == undefined && !body.success) {
+                reject([false, "Failed captcha verification"])
+                return;
+            }
+
+            solve([true, "Sucess"])
+        })
     }
 }
