@@ -28,13 +28,13 @@ export function redirector(app: any) {
 
 
   // bootstrap css
-  app.get('/bootstrap', (_: Request, res: Response) =>
+  app.get('/bootstrap.css', (_: Request, res: Response) =>
     res.redirect(
       `https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css`
     ))
 
   // bootstrap js
-  app.get('/bootstrapjs', (_: Request, res: Response) =>
+  app.get('/bootstrap.js', (_: Request, res: Response) =>
     res.redirect(
       `https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js`
     ))

@@ -175,7 +175,6 @@ export default class Server {
             endSocketUser: (token: string) => {
                 let socketid = find(this.users, token);
                 if (socketid == "" || token == "") return;
-                this.io.sockets.to(socketid).emit("disconnect")
                 this.availableTokens.splice(this.availableTokens.indexOf(token), 1)
             },
 

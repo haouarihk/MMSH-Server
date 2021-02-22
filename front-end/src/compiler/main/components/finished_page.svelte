@@ -8,11 +8,11 @@
     <div id="text">Finished compiling!</div>
     <div id="text2">Your download will start soon..</div>
     <div id="text3">
-        Incase it didn't, click <a href={url}>here</a>
+        Incase it didn't, click <a href={`./${url}`}>here</a>
     </div>
 
     <form action="https://www.overleaf.com/docs" method="post" target="_blank">
-        <input type="text" name="snip_uri" value={url} hidden />
+        <input type="text" name="snip_uri" value={location.href + url} hidden />
         <input class="openInOverleaf" type="submit" value="Open in Overleaf" />
     </form>
     <br />

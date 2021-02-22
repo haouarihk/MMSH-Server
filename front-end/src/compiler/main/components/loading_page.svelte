@@ -14,7 +14,13 @@
                 Finished = true;
                 downloadTheFile(_url);
             });
-            socket.on("err", errorMessage);
+
+            socket.on("err", (err) => {
+                if (!Finished) {
+                    errorMessage(err);
+                }
+            });
+
             socket.on("disconnect", () => {
                 if (!Finished) {
                     errorMessage("You got disconnected from the server");
