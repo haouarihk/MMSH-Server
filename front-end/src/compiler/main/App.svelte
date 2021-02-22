@@ -25,10 +25,8 @@
     };
 </script>
 
-<link src="https://www.google.com/recaptcha/api.js" />
-
 {#if vmod == 1}
-    <LoadingPage {token} {downloadTheFile} />
+    <LoadingPage {token} {downloadTheFile} {errorMessage} />
 {:else if vmod == 2}
     <FinishedPage {url} />
 {:else if vmod == 3}

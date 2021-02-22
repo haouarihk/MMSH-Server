@@ -14,7 +14,9 @@ import { data } from '../d/types';
 import fetch from 'node-fetch';
 
 import * as Socket from "socket.io"
-import { find } from "./utils";
+import { find, throttleHanding } from "./utils";
+import { redirector } from "./serverComponents/redirector"
+
 
 
 export default class Server {
@@ -97,15 +99,25 @@ export default class Server {
                 })
             })
         })
+
+        redirector(this.app)
     }
 
     runSocket() {
         this.io.on('connection', (socket: Socket.Socket) => {
 
+
+            socket.use((packet: any[], next: Function) => {
+                if (throttleHanding.canBeServed(socket, packet)) {
+                    next();
+                }
+            });
+
             socket.on("disconnect", () => {
-                console.log("a user disconnected")
+
                 if (!this.users[socket.id]) return;
 
+                console.log("a registerd user disconnected")
                 const ti = this.availableTokens.indexOf(this.users[socket.id])
 
                 if (ti > -1) {
@@ -115,25 +127,29 @@ export default class Server {
             })
 
             socket.on("takeMyToken", (token: string) => {
-                console.log("a user with token->", token)
-                if (this.availableTokens.indexOf(token) > -1)
+                if (this.availableTokens.indexOf(token) > -1) {
+                    console.log('a regesterd user connected');
                     this.users[socket.id] = token;
-                else
+                }
+                else {
+                    socket.emit("err", "sorry your token has expired.")
                     socket.disconnect()
+                }
             })
 
-            console.log('a user connected');
+
         });
     }
 
     async use(plugin: any, tson: data.Plugin) {
-        // possible breaking path
-        let alldir = {
+        // adding all possible paths needed
+        let alldir = plugin.alldir = {
             maindir: tson.maindir,
             front_end: join(_dirname, this.settings.front_end_out_dir, tson.maindir),
             back_end: join(_dirname, "plugins", tson.maindir)
         }
 
+        // Adding plugin to the list
         this.plugins.push(tson);
 
         // giving the express app to the plugin
@@ -145,14 +161,13 @@ export default class Server {
         plugin.router = new Router({
             // Socket stuff for logs while in proccess
             newSocketMessage: (token: string, event: string, message: any) => {
-                console.log(token, event, message)
                 let socketid = find(this.users, token);
                 if (socketid == "") return
                 this.io.to(socketid).emit(event, message)
             },
 
             // adding a new available token
-            newSocketUser: (token: string) => { console.log(token), this.availableTokens.push(token) },
+            newSocketUser: (token: string) => { this.availableTokens.push(token) },
 
             // adding a new available token
             endSocketUser: (token: string) => {
@@ -172,11 +187,10 @@ export default class Server {
             alldir
         })
 
-        plugin.alldir = alldir;
 
-        Object.keys(tson.config).forEach((_k: string) => {
-            plugin[_k] = { ...tson.config[_k] }
-        })
+        Object.keys(tson.config).forEach((_k: string) =>
+            plugin[_k] = tson.config[_k]
+        )
 
         plugin.start()
     }

@@ -21,7 +21,7 @@
     "config": {
         "debug": false,
         "logInFile": true,
-        "timetoGarbageCleaner": 240,
+        "timetoGarbageCleaner": 1,
         "deleteallTempFilesOnStart": true,
         "filesizeLimitsMB": 100,
         "randomStringSize": 8,

@@ -120,6 +120,11 @@
     }
 </script>
 
+<svelte:head>
+    <script src="/captcha"></script>
+</svelte:head>
+
+
 <div
     id="main"
     class={highlighted ? "highlight" : ""}
@@ -129,6 +134,12 @@
     on:drop|preventDefault={handleDrop}
 >
     <div>Drag and Drop</div>
+
+    <div
+        class="g-recaptcha"
+        data-sitekey={process.env.SITEKEY}
+        data-callback="verifyUser"
+    />
 
     {#if submitBTNVisible}
         <input

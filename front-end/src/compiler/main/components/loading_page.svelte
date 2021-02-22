@@ -1,15 +1,26 @@
 <script lang="ts">
     export let token: string;
     export let downloadTheFile: (url: string) => void;
+    export let errorMessage: (msg: string) => void;
     let log: string = "Starting";
 
+    let Finished: boolean = false;
     $: {
         console.log(token);
         if (token) {
             // @ts-ignore
             const socket = io();
-            socket.on("url", downloadTheFile);
-            socket.on("log", function (_log) {
+            socket.on("url", (_url) => {
+                Finished = true;
+                downloadTheFile(_url);
+            });
+            socket.on("err", errorMessage);
+            socket.on("disconnect", () => {
+                if (!Finished) {
+                    errorMessage("You got disconnected from the server");
+                }
+            });
+            socket.on("log", (_log) => {
                 log = _log;
             });
 
@@ -17,6 +28,10 @@
         }
     }
 </script>
+
+<svelte:head>
+    <script src="/socket.io/socket.io.js"></script>
+</svelte:head>
 
 <div id="main" class="fof">
     <h1 id="text">In Progress</h1>
