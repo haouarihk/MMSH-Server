@@ -37,8 +37,8 @@
     }
 
     .highlight {
-        color: white;
-        border: 10vh solid rgb(251, 244, 244) !important;
-        background: #4dd5ff;
+        color: rgba(255, 255, 255, 0.678);
+        border: 5vh solid rgb(251, 244, 244) !important;
+        background: #ff9d4d;
     }
 </style>
