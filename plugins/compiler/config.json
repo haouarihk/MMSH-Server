@@ -29,7 +29,7 @@
             {
                 "name": "Docx to Latex",
                 "commander": "",
-                "CompilerPath": "./compilers/doc2tex/d2t",
+                "CompilerPath": "./compilers/docx2tex/d2t",
                 "command": "-o \"#{oPath}\" \"#{iPath.type}\"",
                 "whitelistInputs": [
                     "Docx"
