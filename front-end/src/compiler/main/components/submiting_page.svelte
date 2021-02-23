@@ -1,12 +1,12 @@
 <script lang="ts">
     import pdh from "param-handler";
+    import DropArea from "./dropArea.svelte";
 
     export let setToken: (_token: string) => void;
 
     export let errorMessage: Function;
     export let vmod: number;
     let directSubmitting: boolean = false,
-        highlighted: boolean = false,
         typesVisible: boolean = true,
         submitBTNVisible: boolean = true,
         inputVisible: boolean = false;
@@ -43,14 +43,6 @@
         submitBTNVisible = false;
     }
 
-    function highlight(e) {
-        highlighted = true;
-    }
-
-    function unhighlight(e) {
-        highlighted = false;
-    }
-
     //@ts-ignore
     let _globalData = globalData;
     let compilers: { name: string }[] = Object.keys(_globalData.compilers).map(
@@ -66,8 +58,6 @@
         dataTransfer = e.dataTransfer;
         input.files = dataTransfer.files;
         files = input.files;
-
-        unhighlight(e);
 
         if (directSubmitting) {
             clickSubmit();
@@ -95,7 +85,7 @@
         data.append("file", input.files[0]);
 
         // the compiler type
-        data.append("type", "" + selectedType);
+        data.append("type", `${selectedType}`);
 
         // the user captcha token
         data.append("g-recaptcha", token);
@@ -124,14 +114,7 @@
     <script src="/captcha"></script>
 </svelte:head>
 
-<div
-    id="main"
-    class={highlighted ? "highlight" : ""}
-    on:dragenter|preventDefault={highlight}
-    on:dragover|preventDefault={highlight}
-    on:dragleave|preventDefault={unhighlight}
-    on:drop|preventDefault={handleDrop}
->
+<DropArea {handleDrop}>
     <div>Drag and Drop</div>
 
     {#if submitBTNVisible}
@@ -155,7 +138,7 @@
             </h3>
         </div>
     {/if}
-</div>
+</DropArea>
 
 <style>
     * {
