@@ -6,7 +6,8 @@
 
     export let errorMessage: Function;
     export let vmod: number;
-    let directSubmitting: boolean = false,
+    let hoverViewingAllOptions: boolean = true,
+        directSubmitting: boolean = false,
         typesVisible: boolean = true,
         submitBTNVisible: boolean = true,
         inputVisible: boolean = false;
@@ -21,7 +22,7 @@
             : reverse;
     };
 
-    let maintype = paramChecker(ph.get("type"), 0);
+    const maintype = paramChecker(ph.get("type"), 0);
 
     console.log(typesVisible, ph.get("hidetypes"));
 
@@ -38,21 +39,30 @@
 
     if (paramChecker(ph.get("portable"), false)) {
         directSubmitting = true;
+        hoverViewingAllOptions = false;
         typesVisible = false;
         inputVisible = false;
         submitBTNVisible = false;
     }
 
     //@ts-ignore
-    let _globalData = globalData;
-    let compilers: { name: string }[] = Object.keys(_globalData.compilers).map(
-        (key) => _globalData.compilers[key]
-    );
+    const _globalData = globalData;
+    const compilers: { name: string }[] = Object.keys(
+        _globalData.compilers
+    ).map((key) => _globalData.compilers[key]);
 
     let files: any = [];
     let dataTransfer: { files: any } = { files: [] };
 
     let input: any = dataTransfer;
+
+    function onHover(_e) {
+        hoverViewingAllOptions = false;
+    }
+
+    function onExit(_e) {
+        hoverViewingAllOptions = true;
+    }
 
     function handleDrop(e) {
         dataTransfer = e.dataTransfer;
@@ -114,29 +124,35 @@
     <script src="/captcha"></script>
 </svelte:head>
 
-<DropArea {handleDrop}>
+<DropArea {handleDrop} {onHover} {onExit}>
     <div>Drag and Drop</div>
 
-    {#if submitBTNVisible}
-        <input
-            type="button"
-            on:click={clickSubmit}
-            value="submit"
-            disabled={!compilers || submitable}
-        /><br />
-    {/if}
+    {#if hoverViewingAllOptions}
+        {#if submitBTNVisible}
+            <input
+                type="button"
+                on:click={clickSubmit}
+                value="submit"
+                disabled={!compilers || submitable}
+            /><br />
+        {/if}
 
-    {#if typesVisible}
-        <div style="padding:10px 10px;">
-            <h3>
-                compile with
-                <select name="type" default={false} bind:value={selectedType}>
-                    {#each compilers as option}
-                        <option value={option.name}>{option.name}</option>
-                    {/each}
-                </select>
-            </h3>
-        </div>
+        {#if typesVisible}
+            <div style="padding:10px 10px;">
+                <h3>
+                    compile with
+                    <select
+                        name="type"
+                        default={false}
+                        bind:value={selectedType}
+                    >
+                        {#each compilers as option}
+                            <option value={option.name}>{option.name}</option>
+                        {/each}
+                    </select>
+                </h3>
+            </div>
+        {/if}
     {/if}
 </DropArea>
 
@@ -144,21 +160,6 @@
     * {
         transition: all 0.4s;
         font-size: 5vw;
-    }
-
-    #main {
-        padding: 5vw;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        border: 10vh dashed #c3d3d8;
-    }
-
-    .highlight {
-        color: white;
-        border: 10vh solid rgb(251, 244, 244) !important;
-        background: #4dd5ff;
     }
 
     @keyframes type {

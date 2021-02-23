@@ -1,16 +1,20 @@
 <script lang="ts">
     let highlighted: boolean = false;
     export let handleDrop: (e: any) => void;
+    export let onHover: (e: any) => void = () => {};
+    export let onExit: (e: any) => void = () => {};
     function _handleDrop(e) {
         handleDrop(e);
-        unhighlight();
+        unhighlight(e);
     }
 
-    function highlight() {
+    function highlight(e) {
+        onHover(e);
         highlighted = true;
     }
 
-    function unhighlight() {
+    function unhighlight(_e) {
+        onExit(_e);
         highlighted = false;
     }
 </script>
@@ -34,11 +38,13 @@
         height: 100%;
         text-align: center;
         border: 10vh dashed #c3d3d8;
+        transition: all 0.1s;
     }
 
     .highlight {
         color: rgba(255, 255, 255, 0.678);
-        border: 5vh solid rgb(251, 244, 244) !important;
+        border: 0vh dashed rgb(251, 244, 244) !important;
         background: #ff9d4d;
+        transition: all 0.2s;
     }
 </style>
