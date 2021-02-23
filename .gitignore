@@ -2,7 +2,7 @@ front-end/public/**/*
 server/lib
 
 
-
+plugins/**/compilers/*
 plugins/**/input/*
 plugins/**/output/*
 plugins/**/logs/*
