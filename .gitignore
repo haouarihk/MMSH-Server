@@ -1,11 +1,12 @@
 front-end/public/**/*
 server/lib
 
+plugins/compiler/compilers/*
 
-plugins/**/compilers/*
 plugins/**/input/*
 plugins/**/output/*
 plugins/**/logs/*
+
 
 .env
 
