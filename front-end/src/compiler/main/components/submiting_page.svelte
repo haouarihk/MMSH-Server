@@ -51,10 +51,8 @@
         _globalData.compilers
     ).map((key) => _globalData.compilers[key]);
 
+    let input;
     let files: any = [];
-    let dataTransfer: { files: any } = { files: [] };
-
-    let input: any = dataTransfer;
 
     function onHover(_e) {
         hoverViewingAllOptions = false;
@@ -65,9 +63,7 @@
     }
 
     function handleDrop(e) {
-        dataTransfer = e.dataTransfer;
-        input.files = dataTransfer.files;
-        files = input.files;
+        files = e.dataTransfer.files;
 
         if (directSubmitting) {
             clickSubmit();
@@ -77,9 +73,10 @@
     let submitable: boolean = false;
 
     $: {
-        submitable = files.length == 0;
+        submitable = files > 0;
     }
 
+    // captcha checking
     function clickSubmit() {
         grecaptcha.ready(() => {
             grecaptcha
@@ -88,11 +85,12 @@
         });
     }
 
+    // submiting the form
     async function submitit(token: string) {
         var data = new FormData();
 
         // the file
-        data.append("file", input.files[0]);
+        data.append("file", files[0]);
 
         // the compiler type
         data.append("type", `${selectedType}`);
@@ -124,8 +122,17 @@
     <script src="/captcha"></script>
 </svelte:head>
 
-<DropArea {handleDrop} {onHover} {onExit}>
+<DropArea
+    {handleDrop}
+    {onHover}
+    {onExit}
+    onClick={() => {
+        if (!hoverViewingAllOptions) input.click();
+    }}
+>
     <div>Drag and Drop</div>
+
+    <input type="file" name="file" bind:files bind:this={input} hidden />
 
     {#if hoverViewingAllOptions}
         {#if submitBTNVisible}

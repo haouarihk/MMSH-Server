@@ -886,10 +886,10 @@ content-type@~1.0.4:
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
   integrity sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==
 
-converter-toless-plugin@0.1.259:
-  version "0.1.259"
-  resolved "https://registry.yarnpkg.com/converter-toless-plugin/-/converter-toless-plugin-0.1.259.tgz#a535460c1db5ea9d3664a6bf4145fa432bef4849"
-  integrity sha512-CLHCDnYluTZCCB3n4E6pEiitWD8mRyt2py9rTE0zEfohdwVB2dM7xtiYWaTjLW16VOb2dm2+dVytGFD6qoaJNg==
+converter-toless-plugin@0.1.27:
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/converter-toless-plugin/-/converter-toless-plugin-0.1.27.tgz#c7d56e057540394b03adebc6799ee780c47a020c"
+  integrity sha512-ywCQybRaZALsHPsdp8QUzbqFwTYDyjPYCDEruFgCy/z45MwaCyqggk71hEwOwC9kWffYZNJSuHVEcPlEbXiaLA==
   dependencies:
     aforwait "^1.1.11"
     app-root-path "^3.0.0"

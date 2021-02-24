@@ -3,6 +3,14 @@
     export let handleDrop: (e: any) => void;
     export let onHover: (e: any) => void = () => {};
     export let onExit: (e: any) => void = () => {};
+    export let onClick: (e: any) => void = () => {};
+
+    function _onclick(_e) {
+        onClick(_e);
+        highlight(_e);
+        unhighlight(_e);
+    }
+
     function _handleDrop(e) {
         handleDrop(e);
         unhighlight(e);
@@ -26,6 +34,7 @@
     on:dragover|preventDefault={highlight}
     on:dragleave|preventDefault={unhighlight}
     on:drop|preventDefault={_handleDrop}
+    on:click={_onclick}
 >
     <slot />
 </div>
