@@ -12,7 +12,15 @@
     </div>
 
     <form action="https://www.overleaf.com/docs" method="post" target="_blank">
-        <input type="text" name="snip_uri" value={location.href + url} hidden />
+        <input
+            type="text"
+            name="snip_uri"
+            value={location.href.substring(
+                0,
+                location.href.length - location.search.length
+            ) + url}
+            hidden
+        />
         <input class="openInOverleaf" type="submit" value="Open in Overleaf" />
     </form>
     <br />
