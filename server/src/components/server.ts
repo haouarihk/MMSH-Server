@@ -148,7 +148,7 @@ export default class Server {
         let alldir = plugin.alldir = {
             maindir: tson.maindir,
             front_end: join(_dirname, this.settings.front_end_out_dir, tson.maindir),
-            back_end: join(_dirname, "plugins", tson.maindir)
+            back_end: join(this.settings.plugins_dir, tson.maindir)
         }
 
         // Adding plugin to the list

@@ -74,7 +74,7 @@ export default class Router {
     }
 
     path(name: string) {
-        return join(_dirname, "plugins", this.alldir.maindir, this.paths[name])
+        return join(this.alldir.back_end, this.paths[name])
     }
 
 }
