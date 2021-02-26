@@ -34,24 +34,35 @@
                 "whitelistInputs": [
                     "Docx"
                 ]
+            },
+            {
+                "name": "Docx to Latex (pandoc)",
+                "commander": "pandoc",
+                "CompilerPath": "",
+                "command": "pandoc \"#{iPath.type}\" --from docbook --to latex -o \"#{oPath}/#{name}.tex\"",
+                "buildOutputDirectory":true,
+                "whitelistInputs": [
+                    "Docx",
+                    "Doc"
+                ]
             }
         ],
-
-        "filter":{
+        "filter": {
             "enabled": true,
-
             "words": [
-                "fuck", "shit", "Swear", "www", "https", "http", "*", ">"
+                "fuck",
+                "shit",
+                "Swear",
+                "www",
+                "https",
+                "http",
+                "*",
+                ">"
             ],
-        
             "filterWords": true,
-        
             "filterComas": true,
-        
             "filterSlashes": true,
-        
             "filterUsingDecoder": true,
-
             "replaceBy": "u"
         }
     }

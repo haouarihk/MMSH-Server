@@ -2,6 +2,7 @@
     "port": 3002,
     "front_end_div_dir": "front-end/src",
     "front_end_out_dir": "front-end/public",
+    "plugins_dir":"/plugins",
     "plugins": [
         {
             "name": "compiler",

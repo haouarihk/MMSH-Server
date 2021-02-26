@@ -6,6 +6,14 @@
 
     export let errorMessage: Function;
     export let vmod: number;
+
+    //@ts-ignore
+    const _globalData = globalData;
+    const compilers: { name: string }[] = _globalData.compilers;
+    /*Object.keys(
+         _globalData.compilers
+     ).map((key) => _globalData.compilers[key]);*/
+
     let hoverViewingAllOptions: boolean = true,
         directSubmitting: boolean = false,
         typesVisible: boolean = true,
@@ -14,15 +22,15 @@
 
     const ph = new pdh.QParamer(window);
 
-    const paramChecker = (prm, oud, reverse: boolean = false) => {
-        return prm === undefined
-            ? oud
-            : prm === null || prm
-            ? !reverse
-            : reverse;
+    const paramChecker = (prm, oud?, reverse: boolean = false) => {
+        if (prm === undefined) return oud;
+        else if (prm === null) return !reverse;
+        else if (typeof prm === typeof "" || typeof prm === typeof 5)
+            return prm;
+        else return prm ? !reverse : reverse;
     };
 
-    const maintype = paramChecker(ph.get("type"), 0);
+    const maintype = paramChecker(ph.get("type"), "0");
 
     console.log(typesVisible, ph.get("hidetypes"));
 
@@ -44,12 +52,6 @@
         inputVisible = false;
         submitBTNVisible = false;
     }
-
-    //@ts-ignore
-    const _globalData = globalData;
-    const compilers: { name: string }[] = Object.keys(
-        _globalData.compilers
-    ).map((key) => _globalData.compilers[key]);
 
     let input;
     let files: any = [];
@@ -74,6 +76,7 @@
 
     $: {
         submitable = files > 0;
+        console.log(selectedType);
     }
 
     // captcha checking
@@ -140,7 +143,7 @@
                 type="button"
                 on:click={clickSubmit}
                 value="submit"
-                disabled={!compilers || submitable}
+                disabled={!compilers || !submitable}
             /><br />
         {/if}
 
@@ -153,8 +156,8 @@
                         default={false}
                         bind:value={selectedType}
                     >
-                        {#each compilers as option}
-                            <option value={option.name}>{option.name}</option>
+                        {#each compilers as option, i}
+                            <option value={i}>{option.name}</option>
                         {/each}
                     </select>
                 </h3>

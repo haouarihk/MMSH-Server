@@ -56,7 +56,7 @@ declare module data {
         front_end_div_dir: string;
         front_end_out_dir: string;
         plugins: Plugin[];
-
+        plugins_dir: string;
         // from .env
         recaptchaKey: string;
     }
