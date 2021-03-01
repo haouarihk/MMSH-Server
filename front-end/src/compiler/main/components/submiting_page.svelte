@@ -9,52 +9,36 @@
 
     //@ts-ignore
     const _globalData = globalData;
-    const compilers: { name: string }[] = _globalData.compilers;
-    /*Object.keys(
-         _globalData.compilers
-     ).map((key) => _globalData.compilers[key]);*/
+    const compilers: { name: string; accept: string[] }[] =
+        _globalData.compilers;
 
     let hoverViewingAllOptions: boolean = true,
         directSubmitting: boolean = false,
         typesVisible: boolean = true,
-        submitBTNVisible: boolean = true,
-        inputVisible: boolean = false;
+        submitBTNVisible: boolean = true;
 
-    const ph = new pdh.QParamer(window);
+    let files: any = [];
 
-    const paramChecker = (prm, oud?, reverse: boolean = false) => {
-        if (prm === undefined) return oud;
-        else if (prm === null) return !reverse;
-        else if (typeof prm === typeof "" || typeof prm === typeof 5)
-            return prm;
-        else return prm ? !reverse : reverse;
-    };
+    //@ts-ignore
+    const ph = new pdh(window);
 
-    const maintype = paramChecker(ph.get("type"), "0");
+    const maintype = ph.get("type", "0");
 
-    console.log(typesVisible, ph.get("hidetypes"));
-
-    typesVisible = paramChecker(ph.get("hidetypes"), typesVisible, true);
-
-    inputVisible = !paramChecker(ph.get("hideinput"), inputVisible, true);
+    typesVisible = ph.get("hidetypes", typesVisible, true);
 
     let selectedType: number = maintype;
 
-    if (paramChecker(ph.get("hideinput"), false)) {
+    if (ph.get("hideinput", false)) {
         submitBTNVisible = false;
-        directSubmitting = ph.get("direct");
+        directSubmitting = ph.get("direct", directSubmitting);
     }
 
-    if (paramChecker(ph.get("portable"), false)) {
+    if (ph.get("portable", false)) {
         directSubmitting = true;
         hoverViewingAllOptions = false;
         typesVisible = false;
-        inputVisible = false;
         submitBTNVisible = false;
     }
-
-    let input;
-    let files: any = [];
 
     function onHover(_e) {
         hoverViewingAllOptions = false;
@@ -67,17 +51,14 @@
     function handleDrop(e) {
         files = e.dataTransfer.files;
 
+        files[0];
+
         if (directSubmitting) {
             clickSubmit();
         }
     }
 
     let submitable: boolean = false;
-
-    $: {
-        submitable = files > 0;
-        console.log(selectedType);
-    }
 
     // captcha checking
     function clickSubmit() {
@@ -119,6 +100,13 @@
                 break;
         }
     }
+
+    // set accepted types
+    let accept;
+    $: {
+        accept = compilers[selectedType].accept;
+        console.log(compilers, selectedType, compilers[selectedType]);
+    }
 </script>
 
 <svelte:head>
@@ -129,13 +117,13 @@
     {handleDrop}
     {onHover}
     {onExit}
-    onClick={() => {
-        if (!hoverViewingAllOptions) input.click();
-    }}
+    submitOnSelect={!hoverViewingAllOptions}
+    bind:files
+    accept={compilers[selectedType].accept
+        .map((a) => `.${a.toLowerCase()}`)
+        .join(",")}
 >
     <div>Drag and Drop</div>
-
-    <input type="file" name="file" bind:files bind:this={input} hidden />
 
     {#if hoverViewingAllOptions}
         {#if submitBTNVisible}

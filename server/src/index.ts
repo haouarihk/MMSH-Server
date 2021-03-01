@@ -8,7 +8,7 @@ import Server from "./components/server"
 
 
 //- importing settings
-const settings: data.Settings = setupConfig('./config/settings.json');
+const settings: data.Settings = setupConfig('/shared/config/settings.json');
 
 //- setting up the main server
 let sr = new Server(settings);

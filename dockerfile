@@ -1,13 +1,12 @@
-FROM ubuntu:20.04
+FROM node:10-alpine
 
-ENV TZ=Europe/Kiev
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+COPY . /main
+WORKDIR /main
 
-WORKDIR /app
-COPY . .
-RUN apt-get update
-RUN apt-get install --assume-yes default-jre npm
+RUN yarn
 
-EXPOSE 3002
+RUN yarn install --dev-dependencies
+
+RUN npm run build
 
 CMD ["npm", "run", "ts-server"] 

@@ -1,10 +1,8 @@
 import fs from "fs"
 import { join } from "path"
 import { Request, Response } from "express";
-import arp from "app-root-path";
 import * as Socket from "socket.io"
 import { data } from "../d/types";
-const _dirname = arp.path
 
 export const forEachSync = async function (that: any, cb: (element: any, index: number) => Promise<void>) {
     for (let i = 0; i < that.length; i++) {
@@ -20,7 +18,7 @@ export function toJs(obj: any) {
 let settings: data.Settings;
 /** setup the settings variable */
 export function setupConfig(path: string): data.Settings {
-    return settings = JSON.parse(fs.readFileSync(join(_dirname, path), "utf-8"));
+    return settings = JSON.parse(fs.readFileSync(path, "utf-8"));
 }
 
 /** get a file from the mainfolder */

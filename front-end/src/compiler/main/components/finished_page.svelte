@@ -1,7 +1,7 @@
 <script lang="ts">
     export let url = "";
 
-    window.location.href = url;
+    setTimeout(() => (window.location.href = url), 5000);
 </script>
 
 <div id="main" class="fof">

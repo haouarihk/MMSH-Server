@@ -1,7 +1,6 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "module": "ES2020",
     "target": "es2020"
   },
   "include": [

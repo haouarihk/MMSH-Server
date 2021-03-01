@@ -108,7 +108,7 @@ async function fromDir(startPath, filter) {
 
 
 
-const extens = JSON.parse(fs.readFileSync(join(_dirname, './config/settings.json'), { encoding: "utf-8" }))
+const extens = JSON.parse(fs.readFileSync('/shared/config/settings.json', { encoding: "utf-8" }))
 
 
 const forEachSync = async function (that, cb) {

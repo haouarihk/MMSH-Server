@@ -5,10 +5,21 @@
     export let onExit: (e: any) => void = () => {};
     export let onClick: (e: any) => void = () => {};
 
+    export let submitOnSelect: boolean = true;
+
+    export let input: any;
+    export let files: any;
+
+    export let accept: string;
+
     function _onclick(_e) {
+        if (submitOnSelect) {
+            input.click();
+            highlight(_e);
+            setTimeout(() => unhighlight(_e), 100);
+        }
+
         onClick(_e);
-        highlight(_e);
-        unhighlight(_e);
     }
 
     function _handleDrop(e) {
@@ -26,6 +37,16 @@
         highlighted = false;
     }
 </script>
+
+<input
+    type="file"
+    name="file"
+    bind:files
+    {accept}
+    bind:this={input}
+    hidden
+    on:error={(r)=>console.log("error",r)}
+/>
 
 <div
     id="main"

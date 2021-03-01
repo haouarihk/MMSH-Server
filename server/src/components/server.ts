@@ -130,7 +130,7 @@ export default class Server {
 
             socket.on("takeMyToken", (token: string) => {
                 if (this.availableTokens.indexOf(token) > -1) {
-                    console.log('a regesterd user connected');
+                    console.log('a registerd user connected');
                     this.users[socket.id] = token;
                 }
                 else {
